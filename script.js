@@ -50,7 +50,7 @@ const playMusic = (track, pause=false)=> {
 }
 
 async function displayAlbums() {
-    let a = await fetch(`/Assets/`);
+    let a = await fetch(`/Music/`);
     let response = await a.text();
     let div = document.createElement('div');
     div.innerHTML = response;
@@ -60,11 +60,11 @@ async function displayAlbums() {
     let array = Array.from(allAs)
         for (let index = 0; index < array.length; index++) {
             const e = array[index];
-        if(e.href.includes('/Assets')){
+        if(e.href.includes('/Music')){
             let folder = e.href.split('/').slice(-2)[0];
 
         // Get the MetaData of the Folder
-        let a = await fetch(`/Assets/${folder}/info.json`);
+        let a = await fetch(`/Music/${folder}/info.json`);
         let response = await a.json();
         cardContainer.innerHTML = cardContainer.innerHTML + `<div data-folder="${folder}" class="card">
                         <div class="play">
@@ -77,7 +77,7 @@ async function displayAlbums() {
                                 </svg>
                             </div>
                         </div>
-                        <img src="/Assets/${folder}/cover.jpg" alt="cover">
+                        <img src="/Music/${folder}/cover.jpg" alt="cover">
                         <h2>${response.title}</h2>
                         <p>${response.description}</p>
                     </div>`;
@@ -87,14 +87,14 @@ async function displayAlbums() {
      // Load the playlist when the card is clicked
      Array.from(document.getElementsByClassName("card")).forEach(e=>{
         e.addEventListener("click", async (item) => {
-            songs = await getSongs(`Assets/${item.currentTarget.dataset.folder}`);
+            songs = await getSongs(`Music/${item.currentTarget.dataset.folder}`);
             playMusic(songs[0]);
         })
     });
 }
 async function main() {
     // Get the list of all Songs
-    await getSongs("Assets/cs");
+    await getSongs("Music/cs");
     playMusic(songs[0], true);
 
     // Display all the albums on the page
